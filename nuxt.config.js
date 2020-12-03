@@ -1,7 +1,8 @@
 export default {
+  dev: true,
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'sales-nuxt',
+    title: 'Sales',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -14,7 +15,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['~/plugins/axios'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -40,4 +41,10 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
+  tailwindcss: {
+    configPath: 'tailwind.config.js',
+  },
+  router: {
+    linkExactActiveClass: 'bg-gray-900 text-white',
+  },
 }
