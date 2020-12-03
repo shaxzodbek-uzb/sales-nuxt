@@ -22,8 +22,11 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/moment": "^1.6.1",
+    "@nuxtjs/toast": "^3.3.1",
     "core-js": "^3.6.5",
-    "nuxt": "^2.14.6"
+    "nuxt": "^2.14.6",
+    "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",

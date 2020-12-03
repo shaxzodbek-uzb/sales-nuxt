@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="mt-5 md:mt-0 md:col-span-2">
-        <div class="shadow sm:rounded-md sm:overflow-hidden">
+        <div class="shadow sm:rounded-md">
           <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
             <label class="block">
               <span class="text-gray-700">Название продукта *</span>
@@ -32,7 +32,7 @@
             </label>
             <div class="flex md:flex-row flex-col">
               <label class="md:w-1/4 w-full md:pr-2">
-                <span class="text-gray-700">Приходная цена *</span>
+                <span class="text-gray-700">Цена продажи *</span>
                 <input
                   v-model="form.products[0].price"
                   type="number"
@@ -50,12 +50,14 @@
                 />
               </label>
               <label class="md:w-1/4 w-full md:pr-2">
-                <span class="text-gray-700">Дата прихода</span>
-                <input
-                  v-model="form.products[0].date"
-                  class="form-input mt-1 block w-full"
-                  placeholder="2020.12.02"
-                />
+                <span class="text-gray-700">Дата продажи </span>
+                <client-only
+                  ><date-picker
+                    v-model="form.products[0].date"
+                    class="form-input mt-1 block w-full"
+                    placeholder="MM/DD/YYYY"
+                    format="MM/dd/yyyy"
+                /></client-only>
               </label>
               <label class="md:w-1/4 w-full">
                 <span class="text-gray-700">Номер партии товара</span>
@@ -78,7 +80,6 @@
         </div>
       </div>
     </div>
-    {{ form }}
   </div>
 </template>
 
@@ -94,7 +95,8 @@ export default {
             id: 0,
             price: 0,
             quantity: 0,
-            //  date: null, code: null
+            date: new Date(),
+            code: null,
           },
         ],
       },
@@ -102,16 +104,30 @@ export default {
   },
   mounted() {
     const me = this
-    this.$axios.$get(`/products`).then((res) => {
-      while (me.products.pop());
-      me.products.push(...res.data.products)
-    })
+    this.$axios
+      .$get(`/products`)
+      .then((res) => {
+        while (me.products.pop());
+        me.products.push(...res.data.products)
+      })
+      .catch((e) => {
+        this.$toast.error('Ошибка в запросе')
+      })
   },
   methods: {
     submitForm() {
-      this.$axios.$post('/transactions', this.form).then((res) => {
-        console.log(res)
-      })
+      this.$toast.show('Отправка запроса ...')
+      //   this.form.products[0].date = this.form.products[0].date.toLocaleDateString(
+      //     'en-US'
+      //   )
+      this.$axios
+        .$post('/transactions', this.form)
+        .then((res) => {
+          this.$toast.show('Успешно завершено!')
+        })
+        .catch((e) => {
+          this.$toast.error('Ошибка в запросе')
+        })
     },
   },
 }
